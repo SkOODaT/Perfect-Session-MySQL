@@ -37,7 +37,6 @@ public struct MySQLSessions {
 		exec(stmt, params: [Int(Date().timeIntervalSince1970)])
 	}
 
-
 	public func save(session: PerfectSession) {
 		var s = session
 		s.touch()
@@ -103,8 +102,7 @@ public struct MySQLSessions {
 		var session = PerfectSession()
 		let server = connect()
 		let params = [token]
-		var lastStatement = MySQLStmt(server)
-		defer { lastStatement.close() }
+		let lastStatement = MySQLStmt(server)
 		var _ = lastStatement.prepare(statement: "SELECT token,userid,created, updated, idle, data, ipaddress, useragent FROM \(MySQLSessionConnector.table) WHERE token = ?")
 
 		for p in params {
@@ -127,7 +125,6 @@ public struct MySQLSessions {
 			session.useragent = row[7] as! String
 		}
 
-		server.close()
 		session._state = "resume"
 		return session
 	}
