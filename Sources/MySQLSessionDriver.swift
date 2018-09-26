@@ -23,7 +23,7 @@ public struct SessionMySQLDriver {
 		requestFilter = (filter, HTTPFilterPriority.high)
 		responseFilter = (filter, HTTPFilterPriority.high)
 
-		queue = DispatchQueue(label: UUID().string)
+		queue = DispatchQueue(label: Foundation.UUID().uuidString)
 		queue.asyncAfter(deadline: (.now() + Double(SessionConfig.purgeInterval))) {
 			let s = MySQLSessions()
 			s.clean()
@@ -110,7 +110,6 @@ extension SessionMySQLFilter: HTTPResponseFilter {
 			return callback(.continue)
 		}
 		
-		driver.save(session: session)
 		let sessionID = session.token
 
 		// 0.0.6 updates
