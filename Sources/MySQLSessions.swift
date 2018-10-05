@@ -103,14 +103,20 @@ public struct MySQLSessions {
 		let server = connect()
 		let params = [token]
 		let lastStatement = MySQLStmt(server)
-		var _ = lastStatement.prepare(statement: "SELECT token,userid,created, updated, idle, data, ipaddress, useragent FROM \(MySQLSessionConnector.table) WHERE token = ?")
+        let statement = "SELECT token,userid,created, updated, idle, data, ipaddress, useragent FROM \(MySQLSessionConnector.table) WHERE token = ?"
 
+        if !lastStatement.prepare(statement: statement) {
+            Log.error(message: "[MySQLSessions] Failed to prepare statement: \(lastStatement.errorMessage()) while \(statement)")
+        }
+        
 		for p in params {
 			lastStatement.bindParam("\(p)")
 		}
 
-		_ = lastStatement.execute()
-
+        if !lastStatement.execute() {
+            Log.error(message: "[MySQLSessions] Failed to execute statement: \(lastStatement.errorMessage()) while \(statement)")
+        }
+        
 		let result = lastStatement.results()
 
 		_ = result.forEachRow { row in
@@ -160,19 +166,20 @@ public struct MySQLSessions {
 
 	func exec(_ statement: String, params: [Any]) {
 		let server = connect()
-		var lastStatement = MySQLStmt(server)
-		defer { lastStatement.close() }
-		var _ = lastStatement.prepare(statement: statement)
-//		print(server.errorMessage())
+		let lastStatement = MySQLStmt(server)
+        if !lastStatement.prepare(statement: statement) {
+            Log.error(message: "[MySQLSessions] Failed to prepare statement: \(lastStatement.errorMessage()) while \(statement)")
+        }
 
 		for p in params {
 			lastStatement.bindParam("\(p)")
 		}
 
-		_ = lastStatement.execute()
+        if !lastStatement.execute() {
+            Log.error(message: "[MySQLSessions] Failed to execute statement: \(lastStatement.errorMessage()) while \(statement)")
+        }
 
 		let _ = lastStatement.results()
-		server.close()
 	}
 
 	func isError(_ errorMsg: String) -> Bool {
@@ -184,6 +191,3 @@ public struct MySQLSessions {
 	}
 	
 }
-
-
-
