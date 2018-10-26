@@ -5,7 +5,7 @@ let package = Package(
 	name: "PerfectSessionMySQL",
 	targets: [],
 	dependencies: [
-		.Package(url: "https://github.com/PerfectlySoft/Perfect-Session.git", majorVersion: 3),
+		.Package(url: "https://github.com/123FLO321/Perfect-Session.git", majorVersion: 3),
 		.Package(url: "https://github.com/123FLO321/Perfect-MySQL.git", majorVersion: 3),
 	]
 )
