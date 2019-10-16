@@ -54,7 +54,7 @@ public struct MySQLSessions {
 	public func start(_ request: HTTPRequest) -> PerfectSession {
 		var session = PerfectSession()
 		session.token = UUID().uuidString
-		session.ipaddress = request.remoteAddress.host
+		session.ipaddress = request.header(.xForwardedFor) ?? request.remoteAddress.host
 		session.useragent = request.header(.userAgent) ?? "unknown"
 		session._state = "new"
 		session.setCSRF()
