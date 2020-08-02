@@ -1,18 +1,20 @@
-// swift-tools-version:4.1
+// swift-tools-version:5.2
 
 import PackageDescription
 
 let package = Package(
     name: "PerfectSessionMySQL",
+    platforms: [
+        .macOS(.v10_15)
+    ],
     products: [
         .library(name: "PerfectSessionMySQL", targets: ["PerfectSessionMySQL"])
     ],
     dependencies: [
-        .package(url: "https://github.com/123FLO321/Perfect-Session.git", .exact("3.1.6")),
-        .package(url: "https://github.com/123FLO321/Perfect-MySQL.git", .exact("3.2.2"))
+        .package(name: "PerfectSession", url: "https://github.com/123FLO321/Perfect-Session.git", .branch("swift5")),
+        .package(name: "PerfectMySQL", url: "https://github.com/123FLO321/Perfect-MySQL.git", .branch("swift5")),
     ],
     targets: [
         .target(name: "PerfectSessionMySQL", dependencies: ["PerfectSession", "PerfectMySQL"])
-   
     ]
 )
